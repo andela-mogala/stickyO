@@ -11,7 +11,7 @@ window.onload = () => {
   let stickiesArray = getStickiesArray();
 
   for (let key in stickiesArray) {
-    addStickyToDOM(stickiesArray[key]);
+    addStickyToDOM(key, stickiesArray[key]);
   }
 }
 
@@ -22,18 +22,20 @@ function getStickiesArray() {
     localStorage.setItem("stickesArray", JSON.stringify(stickiesArray));
   } else {
       stickiesArray = JSON.parse(stickiesArray);
-    }
-    return stickiesArray;
+  }
+  return stickiesArray;
 }
 
-function addStickyToDOM(value) {
+function addStickyToDOM(key, value) {
   let stickies = document.querySelector("#stickies");
   let sticky = document.createElement("li");
+  sticky.setAttribute("id", key);
   let span = document.createElement("span");
   span.setAttribute("class", "sticky");
   span.innerHTML = value;
   sticky.appendChild(span);
   stickies.appendChild(sticky);
+  sticky.onclick = deleteSticky;
 }
 
  function createSticky(event) {
@@ -49,6 +51,27 @@ function addStickyToDOM(value) {
     return alert("You can't store empty notes");
   }
 
-  addStickyToDOM(value);
+  addStickyToDOM(stickiesArray.length - 1, value);
   document.querySelector("#note_text").value = "";
+ }
+
+ function deleteSticky(event) {
+  let key = event.target.id;
+  if (event.target.tagName.toLowerCase() === "span") {
+    key = event.target.parentNode.id;
+  }
+
+  const stickiesArray = getStickiesArray();
+  for (let arrKey in stickiesArray) {
+    if (key === arrKey) {
+      stickiesArray.splice(arrKey, 1);
+      localStorage.setItem("stickiesArray", JSON.stringify(stickiesArray));
+    }
+  }
+  removeStickyFromDOM(key);
+ }
+
+ function removeStickyFromDOM(key) {
+  let sticky = document.getElementById(key);
+  sticky.parentNode.removeChild(sticky);
  }
