@@ -8,13 +8,22 @@ window.onload = () => {
       localStorage.clear();
     }
 
-  for (let i = 0; i < localStorage.length; i++) {
-    let key = localStorage.key(i);
-    if (key.substring(0, 6) === "sticky") {
-      let value = localStorage.getItem(key);
-      addStickyToDOM(value);
-    }
+  let stickiesArray = getStickiesArray();
+
+  for (let key in stickiesArray) {
+    addStickyToDOM(stickiesArray[key]);
   }
+}
+
+function getStickiesArray() {
+  let stickiesArray = localStorage.getItem("stickiesArray");
+  if (!stickiesArray) {
+    stickiesArray = [];
+    localStorage.setItem("stickesArray", JSON.stringify(stickiesArray));
+  } else {
+      stickiesArray = JSON.parse(stickiesArray);
+    }
+    return stickiesArray;
 }
 
 function addStickyToDOM(value) {
@@ -29,10 +38,13 @@ function addStickyToDOM(value) {
 
  function createSticky(event) {
   event.preventDefault();
+
+  let stickiesArray = getStickiesArray();
   let value = document.querySelector("#note_text").value;
+
   if (value) {
-    let key = "sticky_" + localStorage.length;
-    localStorage.setItem(key, value);
+    stickiesArray.push(value);
+    localStorage.setItem("stickiesArray", JSON.stringify(stickiesArray));
   } else {
     return alert("You can't store empty notes");
   }
