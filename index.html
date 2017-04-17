@@ -9,7 +9,17 @@
 <body>
   <!--- A form to add new stickies-->
   <form>
+    <label for="note_color">Color: </label>
+    <select id="note_color">
+      <option value="LightGoldenRodYellow" default>yellow</option>
+      <option value="PaleGreen">green</option>
+      <option value="LightPink">pink</option>
+      <option value="LightBlue">blue</option>
+    </select>
+
+    <label for="note_text">Text:</label>
     <input type="text" id="note_text">
+
     <button id="add_button">Add Sticky Note to Self</button>
     <button id="clear_button">Clear Notes</button>
   </form>

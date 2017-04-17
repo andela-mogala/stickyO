@@ -26,14 +26,15 @@ function getStickiesArray() {
   return stickiesArray;
 }
 
-function addStickyToDOM(key, value) {
+function addStickyToDOM(key, note) {
   let stickies = document.querySelector("#stickies");
   let sticky = document.createElement("li");
   sticky.setAttribute("id", key);
   let span = document.createElement("span");
   span.setAttribute("class", "sticky");
-  span.innerHTML = value;
+  span.innerHTML = note.value;
   sticky.appendChild(span);
+  sticky.style.backgroundColor = note.color;
   stickies.appendChild(sticky);
   sticky.onclick = deleteSticky;
 }
@@ -42,16 +43,17 @@ function addStickyToDOM(key, value) {
   event.preventDefault();
 
   let stickiesArray = getStickiesArray();
-  let value = document.querySelector("#note_text").value;
+  const value = document.querySelector("#note_text").value;
+  const color =  document.querySelector("#note_color").value;
 
   if (value) {
-    stickiesArray.push(value);
+    stickiesArray.push({ value, color });
     localStorage.setItem("stickiesArray", JSON.stringify(stickiesArray));
   } else {
     return alert("You can't store empty notes");
   }
 
-  addStickyToDOM(stickiesArray.length - 1, value);
+  addStickyToDOM(stickiesArray.length - 1, { value, color });
   document.querySelector("#note_text").value = "";
  }
 
